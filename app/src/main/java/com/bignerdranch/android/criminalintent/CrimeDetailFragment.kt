@@ -12,7 +12,6 @@ import java.util.UUID
 
 class CrimeDetailFragment : Fragment() {
 
-
     private var _binding: FragmentCrimeDetailBinding? = null
     private val binding get() = checkNotNull(_binding) {
         "Cannot access binding before onCreateView() or after onDestroyView()"
