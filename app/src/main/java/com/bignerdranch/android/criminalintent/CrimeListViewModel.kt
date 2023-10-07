@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent
 
 import androidx.lifecycle.ViewModel
+import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import java.util.Date
 import java.util.UUID
 
