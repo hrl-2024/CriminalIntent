@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import kotlinx.coroutines.Job
@@ -22,8 +24,6 @@ class CrimeListFragment : Fragment() {
     }
 
     private val crimeListViewModel: CrimeListViewModel by viewModels()
-
-    private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,18 +47,15 @@ class CrimeListFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        job = viewLifecycleOwner.lifecycleScope.launch {
-            val crime = crimeListViewModel.loadCrimes()
-            binding.crimeRecyclerView.adapter = CrimeListAdapter(crime)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val crimes = crimeListViewModel.loadCrimes()
+                binding.crimeRecyclerView.adapter = CrimeListAdapter(crimes)
+            }
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        job?.cancel()
     }
 
     override fun onDestroyView() {
