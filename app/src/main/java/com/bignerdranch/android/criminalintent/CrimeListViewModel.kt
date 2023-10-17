@@ -27,6 +27,6 @@ class CrimeListViewModel : ViewModel() {
     }
 
     suspend fun loadCrimes(): List<Crime> {
-        return crimeRepository.getCrime()
+        return crimeRepository.getCrimes()
     }
 }

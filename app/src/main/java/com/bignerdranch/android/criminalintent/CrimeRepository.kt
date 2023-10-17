@@ -18,7 +18,7 @@ class CrimeRepository private constructor(context: Context) {
         DATABASE_NAME
         ).createFromAsset(DATABASE_NAME).build()
 
-    suspend fun getCrime(): List<Crime> = database.crimeDao().getCrimes()
+    suspend fun getCrimes(): List<Crime> = database.crimeDao().getCrimes()
 
     suspend fun getCrime(id: UUID) : Crime = database.crimeDao().getCrime(id)
 
