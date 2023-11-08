@@ -1,14 +1,18 @@
 package com.bignerdranch.android.criminalintent
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import java.util.Date
 import java.util.UUID
+
+private const val TAG = "CrimeDetailFragment"
 
 class CrimeDetailFragment : Fragment() {
 
@@ -19,6 +23,8 @@ class CrimeDetailFragment : Fragment() {
 
     private lateinit var crime: Crime
 
+    private val args: CrimeDetailFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,6 +34,8 @@ class CrimeDetailFragment : Fragment() {
             date = Date(),
             isSolved = false
         )
+
+        Log.d(TAG, "args.crimeId: ${args.crimeId}")
     }
 
     override fun onCreateView(
