@@ -12,6 +12,6 @@ interface CrimeDao {
     fun getCrimes(): Flow<List<Crime>>
 
     @Query("SELECT * FROM crime WHERE id=(:id)")
-    fun getCrime(id: UUID): Crime
+    fun getCrime(id: UUID): Flow<Crime>
 
 }
