@@ -83,7 +83,7 @@ class CrimeDetailFragment : Fragment() {
 
             crimeDate.setOnClickListener {
                 findNavController().navigate(
-                    CrimeDetailFragmentDirections.selectDate()
+                    CrimeDetailFragmentDirections.selectDate(crime.date)
                 )
             }
 
