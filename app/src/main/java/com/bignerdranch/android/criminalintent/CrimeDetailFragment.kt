@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.launch
 import android.text.format.DateFormat
+import androidx.activity.result.contract.ActivityResultContracts
 import java.util.Date
 import java.util.UUID
 
@@ -36,6 +38,12 @@ class CrimeDetailFragment : Fragment() {
 
     private val crimeDetailViewModel: CrimeDetailViewModel by viewModels {
         CrimeDetailViewModelFactory(args.crimeId)
+    }
+
+    private val selectSuspect = registerForActivityResult(
+        ActivityResultContracts.PickContact()
+    ) { uri: Uri? ->
+        // Handle the result
     }
 
     override fun onCreateView(
@@ -61,6 +69,10 @@ class CrimeDetailFragment : Fragment() {
                 crimeDetailViewModel.updateCrime { oldCrime ->
                     oldCrime.copy(isSolved = isChecked)
                 }
+            }
+
+            crimeSuepect.setOnClickListener {
+                selectSuspect.launch(null)  // select a contact requires no input, thus null
             }
         }
 
@@ -110,6 +122,10 @@ class CrimeDetailFragment : Fragment() {
 
                 val chooserIntent = Intent.createChooser(reportIntent, getString(R.string.send_report))
                 startActivity(chooserIntent)
+            }
+
+            crimeSuepect.text = crime.suspect.ifEmpty {
+                getString(R.string.crime_suspect_text)
             }
         }
     }
