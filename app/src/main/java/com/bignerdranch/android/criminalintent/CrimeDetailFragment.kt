@@ -172,9 +172,6 @@ class CrimeDetailFragment : Fragment() {
     }
 
     private fun canResolveIntent(intent: Intent) : Boolean {
-        // Dummy code for testing (verify that if no intent is available, disable the button), will be removed later
-        // intent.addCategory(Intent.CATEGORY_HOME)
-
         val packageManager: PackageManager = requireActivity().packageManager
         val resolveActivity: ResolveInfo? = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
 
