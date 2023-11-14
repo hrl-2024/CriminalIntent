@@ -139,6 +139,12 @@ class CrimeDetailFragment : Fragment() {
                 crimeTitle.setText(crime.title)
             }
 
+            crimePhoto.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections.showPhoto(crime.photoFileName)
+                )
+            }
+
             crimeDate.text = crime.date.toString()
 
             crimeDate.setOnClickListener {
