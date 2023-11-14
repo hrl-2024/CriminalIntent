@@ -22,6 +22,8 @@ import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBi
 import kotlinx.coroutines.launch
 import android.text.format.DateFormat
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import java.io.File
 import java.util.Date
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
@@ -47,6 +49,19 @@ class CrimeDetailFragment : Fragment() {
         // Handle the result
         uri?.let { parseContactSelection(it) }
     }
+
+    private val takePhoto = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { didTakePhoto: Boolean ->
+        // Handle the result
+        if (didTakePhoto && photoName != null) {
+            crimeDetailViewModel.updateCrime { oldCrime ->
+                oldCrime.copy(photoFileName = photoName)
+            }
+        }
+    }
+
+    private var photoName: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,6 +94,21 @@ class CrimeDetailFragment : Fragment() {
 
             val selectSuspectIntent = selectSuspect.contract.createIntent(requireContext(), null)
             crimeSuepect.isEnabled = canResolveIntent(selectSuspectIntent)
+
+            crimeCamera.setOnClickListener {
+                photoName = "IMG_${Date()}.JPG"
+                val photoFile = File(requireContext().applicationContext.filesDir, photoName)
+                val photoUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "com.bignerdranch.android.criminalintent.fileprovider",
+                    photoFile
+                )
+
+                takePhoto.launch(photoUri)
+            }
+
+            val captureImageIntent = takePhoto.contract.createIntent(requireContext(), Uri.parse(""))
+            crimeCamera.isEnabled = canResolveIntent(captureImageIntent)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
