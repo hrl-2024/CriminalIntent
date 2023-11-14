@@ -29,7 +29,9 @@
                     android:id="@+id/crime_camera"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera"
+                    android:contentDescription="Camera button"
+                    android:minHeight="48dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -50,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/crime_title_hint"
                 android:importantForAutofill="no"
-                android:inputType="text" />
+                android:inputType="text"
+                android:minHeight="48dp" />
         </LinearLayout>
     </LinearLayout>
 
