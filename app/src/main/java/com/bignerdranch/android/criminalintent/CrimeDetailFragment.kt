@@ -1,6 +1,8 @@
 package com.bignerdranch.android.criminalintent
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -74,6 +76,9 @@ class CrimeDetailFragment : Fragment() {
             crimeSuepect.setOnClickListener {
                 selectSuspect.launch(null)  // select a contact requires no input, thus null
             }
+
+            val selectSuspectIntent = selectSuspect.contract.createIntent(requireContext(), null)
+            crimeSuepect.isEnabled = canResolveIntent(selectSuspectIntent)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -164,5 +169,15 @@ class CrimeDetailFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun canResolveIntent(intent: Intent) : Boolean {
+        // Dummy code for testing (verify that if no intent is available, disable the button), will be removed later
+        // intent.addCategory(Intent.CATEGORY_HOME)
+
+        val packageManager: PackageManager = requireActivity().packageManager
+        val resolveActivity: ResolveInfo? = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+
+        return resolveActivity != null
     }
 }
