@@ -22,6 +22,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- The authorities is the file path. Must be unique across the whole OS -->
+        <!-- The exported = false: keep data from being publicly visible to random apps querying the system -->
+        <!-- When you do want to expose some content to the larger system, the grantUriPermissions attribute
+         gives you the ability to temporarily grant other apps permission to write to URIs
+         on this authority when you send them out in an intent. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.bignerdranch.android.crimeintent.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!-- The <meta-data> element is used to specify metadata for the corresponding component,
+             it hooks up files.xml to the FileProvider -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/files" />
+        </provider>
+
     </application>
 
     <queries>
