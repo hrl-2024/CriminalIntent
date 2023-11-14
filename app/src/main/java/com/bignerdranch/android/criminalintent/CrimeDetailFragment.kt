@@ -3,7 +3,7 @@ package com.bignerdranch.android.criminalintent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import android.text.format.DateFormat
 import androidx.activity.result.contract.ActivityResultContracts
 import java.util.Date
-import java.util.UUID
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
@@ -44,6 +43,7 @@ class CrimeDetailFragment : Fragment() {
         ActivityResultContracts.PickContact()
     ) { uri: Uri? ->
         // Handle the result
+        uri?.let { parseContactSelection(it) }
     }
 
     override fun onCreateView(
@@ -145,5 +145,24 @@ class CrimeDetailFragment : Fragment() {
         }
 
         return getString(R.string.crime_report, crime.title, dateString, solvedString, suspectText)
+    }
+
+    private fun parseContactSelection(contactUri: Uri) {
+        val queryFields = arrayOf(
+            ContactsContract.Contacts.DISPLAY_NAME
+        )
+
+        val queryCursor = requireActivity().contentResolver.query(
+            contactUri, queryFields, null, null, null
+        )
+
+        queryCursor?.use {cursor ->
+            if (cursor.moveToFirst()) {
+                val suspect = cursor.getString(0)
+                crimeDetailViewModel.updateCrime { oldCrime ->
+                    oldCrime.copy(suspect = suspect)
+                }
+            }
+        }
     }
 }
