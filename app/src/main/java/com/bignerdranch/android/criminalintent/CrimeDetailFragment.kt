@@ -21,13 +21,16 @@ import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.launch
 import android.text.format.DateFormat
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import java.io.File
 import java.util.Date
+import java.util.Locale
 
-private const val DATE_FORMAT = "EEE, MMM, dd"
+private val DATE_FORMAT_LOC = DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, MMM, dd")
+val DATE_FORMAT = DATE_FORMAT_LOC.split(" ").joinToString(", ")
 
 class CrimeDetailFragment : Fragment() {
 
@@ -139,6 +142,12 @@ class CrimeDetailFragment : Fragment() {
                 crimeTitle.setText(crime.title)
             }
 
+            crimePhoto.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections.showPhoto(crime.photoFileName)
+                )
+            }
+
             crimeDate.text = crime.date.toString()
 
             crimeDate.setOnClickListener {
@@ -224,6 +233,14 @@ class CrimeDetailFragment : Fragment() {
                         measuredView.width,
                         measuredView.height
                     )
+
+                    // delete the old picture
+                    val oldPhotoName = binding.crimePhoto.tag as String?
+                    if (oldPhotoName != null) {
+                        val oldPhotoFile = File(requireContext().applicationContext.filesDir, oldPhotoName)
+                        oldPhotoFile.delete()
+                    }
+
                     binding.crimePhoto.setImageBitmap(scaledBitmap)
                     binding.crimePhoto.tag = photoFileName
                 }
