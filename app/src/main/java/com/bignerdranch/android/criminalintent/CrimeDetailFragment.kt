@@ -233,6 +233,14 @@ class CrimeDetailFragment : Fragment() {
                         measuredView.width,
                         measuredView.height
                     )
+
+                    // delete the old picture
+                    val oldPhotoName = binding.crimePhoto.tag as String?
+                    if (oldPhotoName != null) {
+                        val oldPhotoFile = File(requireContext().applicationContext.filesDir, oldPhotoName)
+                        oldPhotoFile.delete()
+                    }
+
                     binding.crimePhoto.setImageBitmap(scaledBitmap)
                     binding.crimePhoto.tag = photoFileName
                 }
