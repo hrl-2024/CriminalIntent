@@ -148,7 +148,7 @@ class CrimeDetailFragment : Fragment() {
                 )
             }
 
-            crimeDate.text = crime.date.toString()
+            crimeDate.text = DateFormat.format(DATE_FORMAT, crime.date).toString()
 
             crimeDate.setOnClickListener {
                 findNavController().navigate(
